@@ -24,9 +24,11 @@ dependencies = {
 
 build = {
    type = "builtin",
+   modules = {
+   },
    install = {
       bin = {
-         'th'
+         'luaforever'
       }
    }
 }

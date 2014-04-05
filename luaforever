@@ -1,7 +1,6 @@
 #!/usr/bin/env luajit
 
 local async = require 'async'
-local col = async.repl.colorize
 
 require 'pl'
 local opt = lapp[[
@@ -16,6 +15,7 @@ for i,arg in ipairs(arg) do
    table.insert(args, arg)
 end
 
+local col = async.repl.colorize
 print(col.Red('luaforever configured with options: '), opt)
 
 local retries = 0
@@ -27,7 +27,7 @@ local function spawn()
          print(col.Red('process: ' .. process.pid .. ' died with status/signal: ' .. col.blue(status) .. ', ' .. col.green(signal)))
          if status ~= 0 and retries <= opt.retries then
             print(col.Red('re-spawning process...'))
-            spawn()
+            async.setTimeout(300, spawn)
             retries = retries + 1
          else
             print(col.Red('exiting...'))
@@ -37,7 +37,7 @@ local function spawn()
          io.write(data) io.flush()
       end)
       process.stderr.ondata(function(data)
-         io.write(col(data)) io.flush()
+         io.write(data) io.flush()
       end)
    end)
 end
