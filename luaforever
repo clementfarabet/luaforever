@@ -2,11 +2,6 @@
 
 local async = require 'async'
 
-require 'pl'
-local opt = lapp[[
-   -r,--retries        (default inf)        max nb of retries
-]]
-
 require 'trepl'
 local args = {
    '-ltrepl',
@@ -16,16 +11,16 @@ for i,arg in ipairs(arg) do
 end
 
 local col = async.repl.colorize
-print(col.Red('luaforever configured with options: '), opt)
 
 local retries = 0
+local maxretries = 100
 
 local function spawn()
    async.process.spawn(arg[-1], args, function(process)
       print(col.Red('spawned process: ' .. col.blue(process.pid) .. ' with arguments:'), args)
       process.onexit(function(status, signal)
          print(col.Red('process: ' .. process.pid .. ' died with status/signal: ' .. col.blue(status) .. ', ' .. col.green(signal)))
-         if status ~= 0 and retries <= opt.retries then
+         if status ~= 0 and retries <= maxretries then
             print(col.Red('re-spawning process...'))
             async.setTimeout(300, spawn)
             retries = retries + 1
