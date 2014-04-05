@@ -16,7 +16,7 @@ local retries = 0
 local maxretries = 100
 
 local function spawn()
-   async.process.spawn(arg[-1], args, function(process)
+   async.process.spawn('luajit', args, function(process)
       print(col.Red('spawned process: ' .. col.blue(process.pid) .. ' with arguments:'), args)
       process.onexit(function(status, signal)
          print(col.Red('process: ' .. process.pid .. ' died with status/signal: ' .. col.blue(status) .. ', ' .. col.green(signal)))
@@ -32,7 +32,7 @@ local function spawn()
          io.write(data) io.flush()
       end)
       process.stderr.ondata(function(data)
-         io.write(data) io.flush()
+         io.write(col.red(data)) io.flush()
       end)
    end)
 end

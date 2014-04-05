@@ -1,7 +1,7 @@
 require 'sys'
 for i = 1,3 do
    print('something ' .. i)
-   sys.sleep()
+   sys.sleep(1)
 end
-print('crasing...')
+print('crashing...')
 error('error occured')
