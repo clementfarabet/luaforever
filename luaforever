@@ -20,7 +20,7 @@ local function spawn()
       print(col.Red('spawned process: ' .. col.blue(process.pid) .. ' with arguments:'), args)
       process.onexit(function(status, signal)
          print(col.Red('process: ' .. process.pid .. ' died with status/signal: ' .. col.blue(status) .. ', ' .. col.green(signal)))
-         if status ~= 0 and retries <= maxretries then
+         if (status ~= 0 or signal ~= 0) and retries <= maxretries then
             print(col.Red('re-spawning process...'))
             async.setTimeout(300, spawn)
             retries = retries + 1
